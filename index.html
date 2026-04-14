@@ -1,33 +1,74 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Waffle Itis TT</title>
-  <link rel="stylesheet" href="style.css">
-</head>
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ShoppingCart } from "lucide-react";
 
-<body>
+const menuItems = [
+  { name: "Strawberry Cheesecake Madness", price: 60 },
+  { name: "Cookies & Cream Vibes", price: 60 },
+  { name: "Mango Madness", price: 60 },
+  { name: "Fruity Pebbles Bashment", price: 60 },
+  { name: "Choco-Chip Nice Nice", price: 60 }
+];
 
-<header>
-  <h1>Waffle Itis TT</h1>
-  <p>Yuh Belly Go Thank Yuh!</p>
-</header>
+export default function App() {
+  const [cart, setCart] = useState([]);
 
-<h2>Our Menu</h2>
-<img src="menu.jpg" width="300">
+  const addToCart = (item) => {
+    setCart([...cart, item]);
+  };
 
-<h2>Order Now</h2>
-<button onclick="payNow()">Pay Online</button>
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
 
-<br><br>
+  return (
+    <div className="p-4">
+      <header className="text-center mb-6">
+        <h1 className="text-3xl font-bold">Waffle Itis TT</h1>
+        <p>Yuh Belly Go Thank Yuh!</p>
+      </header>
 
-<a href="https://wa.me/18687983893">Order on WhatsApp</a>
+      <section>
+        <h2 className="text-2xl mb-4">Menu</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {menuItems.map((item, index) => (
+            <Card key={index}>
+              <CardContent className="p-4">
+                <h3 className="text-xl font-semibold">{item.name}</h3>
+                <p>${item.price}</p>
+                <Button onClick={() => addToCart(item)} className="mt-2">
+                  Add to Cart
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
 
-<h2>Follow Us</h2>
-<a href="#">Facebook</a><br>
-<a href="#">Instagram</a><br>
-<a href="#">TikTok</a>
+      <section className="mt-6">
+        <h2 className="text-2xl flex items-center gap-2">
+          <ShoppingCart /> Cart
+        </h2>
+        {cart.map((item, i) => (
+          <p key={i}>{item.name} - ${item.price}</p>
+        ))}
+        <h3 className="mt-2 font-bold">Total: ${total}</h3>
+        <Button className="mt-2" onClick={() => window.location.href='https://buy.stripe.com/test'}>
+          Checkout
+        </Button>
+      </section>
 
-<script src="script.js"></script>
-
-</body>
-</html>
+      <section className="mt-6 text-center">
+        <h2 className="text-2xl">Contact</h2>
+        <p>
+          <a href="https://wa.me/18687983893">WhatsApp</a>
+        </p>
+        <p>
+          <a href="https://instagram.com/waffleitis.tt">Instagram</a>
+        </p>
+        <p>
+          <a href="https://facebook.com">Facebook</a>
+        </p>
+      </section>
+    </div>
+  );
+}
